@@ -23,21 +23,21 @@ internal class Program
         var players = provider.RedisCollection<PlayerEntity>();
 
         var uniquePlayerId = Guid.NewGuid().ToString();
+        var startTime = new DateTimeOffset(2024, 11, 21, 12, 30, 00, new TimeSpan(1, 0, 0));
 
         await players.InsertAsync(new PlayerEntity
         {
             UniquePlayerId = uniquePlayerId,
-            StartTime = new DateTimeOffset(2024, 11, 21, 12, 30, 00, new TimeSpan(1, 0, 0)),
+            StartTime = startTime,
         });
 
         var player = await players.FindByIdAsync(uniquePlayerId);
-
-        player.StartTime = new DateTimeOffset(2024, 11, 21, 12, 45, 00, new TimeSpan(1, 0, 0));
 
         await players.SaveAsync();
 
         var player2 = await players.FindByIdAsync(uniquePlayerId);
 
+        Console.WriteLine(player.StartTime);
         Console.WriteLine(player2.StartTime);
         Console.WriteLine(player.StartTime.Offset == player2.StartTime.Offset);
     }
